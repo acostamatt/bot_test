@@ -1,0 +1,27 @@
+{
+  "name": "beto_test",
+  "version": "0.0.1",
+  "description": "Beto Technical Interview",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/acostamatt/beto_test.git"
+  },
+  "author": "Matías Acosta",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/acostamatt/beto_test/issues"
+  },
+  "homepage": "https://github.com/acostamatt/beto_test#readme",
+  "dependencies": {
+    "axios": "^0.21.4",
+    "dotenv": "^10.0.0",
+    "telegraf": "^4.4.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.12"
+  }
+}
