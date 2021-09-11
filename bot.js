@@ -5,22 +5,22 @@ const ENV = require('./env')
 const bot = new Telegraf(ENV.BOT_TOKEN)
 
 const getDateTimeLastUpdate = (date) => {
-    let options = { weekday: 'long', day: 'numeric' }
+    const options = { weekday: 'long', day: 'numeric' }
 
-    let newDate = new Date(date * 1000)
-    let timeStr = newDate.toLocaleTimeString()
-    let dateStr = newDate.toLocaleDateString('es-ES', options)
-    let infoDateStr = "Actualizado: "+dateStr+', '+timeStr+' hs'
+    const newDate = new Date(date * 1000)
+    const timeStr = newDate.toLocaleTimeString()
+    const dateStr = newDate.toLocaleDateString('es-ES', options)
+    const infoDateStr = "Actualizado: "+dateStr+', '+timeStr+' hs'
     return infoDateStr
 }
 
 exports.startBot = async () => {
     try {
+        const dictProducts = {}
         
         const url = 'https://api-cotizaciones.agrofy.com/api/BoardPrices/GetBoardPricesHome'
         const response = await axios(url)
         
-        let dictProducts = {}
         let fechaCarga = response.data[0]['FechaCarga'].split('-')
         fechaCarga = fechaCarga[0]+'/'+fechaCarga[1]
         
@@ -32,8 +32,8 @@ exports.startBot = async () => {
 
         bot.hears('granos', ctx => {
 
-            let infoDateStr = getDateTimeLastUpdate(ctx.message.date)
-            let emojiSeedling = '\u{1F331}';
+            const infoDateStr = getDateTimeLastUpdate(ctx.message.date)
+            const emojiSeedling = '\u{1F331}';
         
             ctx.reply(
                 infoDateStr+'\n\n'+
