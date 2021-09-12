@@ -4,7 +4,7 @@ const ENV = require('./env')
 
 const bot = new Telegraf(ENV.BOT_TOKEN)
 
-const getDateTimeLastUpdate = (date) => {
+const getLastUpdateDate = (date) => {
     const options = { weekday: 'long', day: 'numeric' }
 
     const newDate = new Date(date * 1000)
@@ -14,7 +14,7 @@ const getDateTimeLastUpdate = (date) => {
     return infoDateStr
 }
 
-exports.startBot = async () => {
+const getDataAgrofy = async () => {
     try {
         const dictProducts = {}
         
@@ -29,39 +29,52 @@ exports.startBot = async () => {
         })
 
         dictProducts['fechaCarga'] = fechaCarga
-
-        bot.hears('granos', ctx => {
-
-            const infoDateStr = getDateTimeLastUpdate(ctx.message.date)
-            const emojiSeedling = '\u{1F331}';
-        
-            ctx.reply(
-                infoDateStr+'\n\n'+
-
-                emojiSeedling+' Soja '+emojiSeedling+'\n'+
-                dictProducts['fechaCarga']+' - '+dictProducts['Soja'][0]['Nombre']+' - $'+dictProducts['Soja'][0]['Precio']+'\n'+
-                dictProducts['fechaCarga']+' - '+dictProducts['Soja'][2]['Nombre']+' - $'+dictProducts['Soja'][2]['Precio']+'\n'+
-                dictProducts['fechaCarga']+' - '+dictProducts['Soja'][3]['Nombre']+' - $'+dictProducts['Soja'][3]['Precio']+'\n\n'+
-
-                emojiSeedling+' Trigo '+emojiSeedling+'\n'+
-                dictProducts['fechaCarga']+' - '+dictProducts['Trigo'][0]['Nombre']+' - $'+dictProducts['Trigo'][0]['Precio']+'\n\n'+
-
-                emojiSeedling+' Maiz '+emojiSeedling+'\n'+
-                dictProducts['fechaCarga']+' - '+dictProducts['Maiz'][0]['Nombre']+' - $'+dictProducts['Maiz'][0]['Precio']+'\n'+
-                dictProducts['fechaCarga']+' - '+dictProducts['Maiz'][2]['Nombre']+' - $'+dictProducts['Maiz'][2]['Precio']+'\n'+
-                dictProducts['fechaCarga']+' - '+dictProducts['Maiz'][3]['Nombre']+' - $'+dictProducts['Maiz'][3]['Precio']+'\n\n'+
-
-                emojiSeedling+' Girasol '+emojiSeedling+'\n'+
-                dictProducts['fechaCarga']+' - '+dictProducts['Girasol'][3]['Nombre']+' - $'+dictProducts['Girasol'][3]['Precio']
-
-            )
-        })
-        
-            
-        bot.launch()
+        return dictProducts
         
     } catch (error) {
         console.log(error)
     }
 }
 
+exports.startBot = async () => {
+    try {
+        
+        const dictProducts = await getDataAgrofy()
+
+        bot.hears('granos', ctx => {
+
+            const infoDateStr = getLastUpdateDate(ctx.message.date)
+            const emojiSoja = '\u{1F331}';
+            const emojiTrigo = '\u{1F33E}';
+            const emojiMaiz = '\u{1F33D}';
+            const emojiGirasol = '\u{1F33B}';
+
+            ctx.reply(
+                infoDateStr+'\n\n'+
+
+                emojiSoja+' Soja '+emojiSoja+'\n'+
+                dictProducts['fechaCarga']+' - '+dictProducts['Soja'][0]['Nombre']+' - $'+dictProducts['Soja'][0]['Precio']+'\n'+
+                dictProducts['fechaCarga']+' - '+dictProducts['Soja'][2]['Nombre']+' - $'+dictProducts['Soja'][2]['Precio']+'\n'+
+                dictProducts['fechaCarga']+' - '+dictProducts['Soja'][3]['Nombre']+' - $'+dictProducts['Soja'][3]['Precio']+'\n\n'+
+
+                emojiTrigo+' Trigo '+emojiTrigo+'\n'+
+                dictProducts['fechaCarga']+' - '+dictProducts['Trigo'][0]['Nombre']+' - $'+dictProducts['Trigo'][0]['Precio']+'\n\n'+
+
+                emojiMaiz+' Maiz '+emojiMaiz+'\n'+
+                dictProducts['fechaCarga']+' - '+dictProducts['Maiz'][0]['Nombre']+' - $'+dictProducts['Maiz'][0]['Precio']+'\n'+
+                dictProducts['fechaCarga']+' - '+dictProducts['Maiz'][2]['Nombre']+' - $'+dictProducts['Maiz'][2]['Precio']+'\n'+
+                dictProducts['fechaCarga']+' - '+dictProducts['Maiz'][3]['Nombre']+' - $'+dictProducts['Maiz'][3]['Precio']+'\n\n'+
+
+                emojiGirasol+' Girasol '+emojiGirasol+'\n'+
+                dictProducts['fechaCarga']+' - '+dictProducts['Girasol'][3]['Nombre']+' - $'+dictProducts['Girasol'][3]['Precio']
+
+            )
+        })
+    
+        
+        bot.launch()
+    } catch (error) {
+        console.log(error)
+    }
+  
+}
